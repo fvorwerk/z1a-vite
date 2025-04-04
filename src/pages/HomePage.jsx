@@ -1,10 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import logo1 from '../assets/images/logo-1.png';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const HomePage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { lang } = useParams();
+  const location = useLocation();
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [status, setStatus] = useState(null);
 
@@ -33,13 +36,31 @@ const HomePage = () => {
     }
   };
 
+  useEffect(() => {
+    // Handle hash navigation on page load
+    if (location.hash) {
+      const element = document.getElementById(location.hash.slice(1));
+      if (element) {
+        // Add a slight delay to ensure proper scroll after page render
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location]);
+
   return (
     <>
-      {/* Hero Section */}
-      <section id="home" className="relative w-full h-screen bg-gradient-to-r from-blue-500 via-black to-purple-600 flex items-center justify-center" 
+      {/* Hero Section - Add will-change to optimize rendering and prevent shifts */}
+      <section 
+        id="home" 
+        className="relative w-full h-screen bg-gradient-to-r from-blue-500 via-black to-purple-600 flex items-center justify-center will-change-transform" 
         style={{ 
-          backgroundImage: "linear-gradient(to right, rgba(59, 130, 246, 0.9) 0%, rgba(59, 130, 246, 0.6) 15%, rgba(0, 0, 0, 0.95) 50%, rgba(147, 51, 234, 0.6) 85%, rgba(147, 51, 234, 0.9) 100%)" 
-        }}>
+          backgroundImage: "linear-gradient(to right, rgba(59, 130, 246, 0.9) 0%, rgba(59, 130, 246, 0.6) 15%, rgba(0, 0, 0, 0.95) 50%, rgba(147, 51, 234, 0.6) 85%, rgba(147, 51, 234, 0.9) 100%)",
+          contain: 'layout paint style', // Ensures better performance
+          transform: 'translateZ(0)' // Force GPU acceleration
+        }}
+      >
         <div className="absolute inset-0 bg-black opacity-60"></div>
         <div className="z-10 text-center px-4">
           {/* Using logo-1 for hero section */}
@@ -67,7 +88,7 @@ const HomePage = () => {
               <p className="text-gray-600 mb-6">
                 {t("We strive to deliver exceptional digital experiences that transform businesses and delight users. Our team combines creativity with technical expertise to build solutions that stand out.")}
               </p>
-              <Link to="/about" className="text-blue-600 font-semibold hover:underline">{t("Learn more →")}</Link>
+              <Link to={`/${lang}/about`} className="text-blue-600 font-semibold hover:underline">{t("Learn more →")}</Link>
             </div>
             <div className="md:w-1/2">
               <div className="rounded-lg shadow-xl w-full h-64 bg-gray-300 flex items-center justify-center">
@@ -85,7 +106,7 @@ const HomePage = () => {
               <p className="text-gray-600 mb-6">
                 {t("From website development to full-scale digital transformation, we offer a range of services tailored to meet your unique business needs and goals.")}
               </p>
-              <Link to="/services" className="text-blue-600 font-semibold hover:underline">{t("View services →")}</Link>
+              <Link to={`/${lang}/services`} className="text-blue-600 font-semibold hover:underline">{t("View services →")}</Link>
             </div>
             <div className="md:w-1/2">
               <div className="rounded-lg shadow-xl w-full h-64 bg-gray-300 flex items-center justify-center">
@@ -103,7 +124,7 @@ const HomePage = () => {
               <p className="text-gray-600 mb-6">
                 {t("Browse our portfolio to see how we've helped businesses like yours achieve their digital goals. Each project represents our commitment to excellence and innovation.")}
               </p>
-              <Link to="/projects" className="text-blue-600 font-semibold hover:underline">{t("See portfolio →")}</Link>
+              <Link to={`/${lang}/projects`} className="text-blue-600 font-semibold hover:underline">{t("See portfolio →")}</Link>
             </div>
             <div className="md:w-1/2">
               <div className="rounded-lg shadow-xl w-full h-64 bg-gray-300 flex items-center justify-center">

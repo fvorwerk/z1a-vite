@@ -18,7 +18,7 @@ i18n
   .use(initReactI18next)
   // Init i18next
   .init({
-    fallbackLng: 'en',
+    fallbackLng: 'de',
     supportedLngs: supportedLanguages,
     debug: import.meta.env.DEV,
     
@@ -28,7 +28,7 @@ i18n
     
     // Backend configuration to point to the correct folder structure
     backend: {
-      loadPath: '/src/locales/{{lng}}/{{ns}}.json',
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
     
     // Adjust document direction based on language
@@ -38,9 +38,13 @@ i18n
     
     // Function to handle RTL languages
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['path', 'localStorage', 'navigator'],
+      lookupFromPathIndex: 0, // Detect language from the first segment of the path
       caches: ['localStorage'],
     },
+
+    // Change default language to German
+    lng: 'de',
   });
 
 // Set document direction based on language

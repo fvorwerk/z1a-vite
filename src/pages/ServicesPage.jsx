@@ -1,8 +1,40 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 
 const ServicesPage = () => {
   const { t } = useTranslation();
+  
+  // Create ref for header section
+  const heroSectionRef = useRef(null);
+  
+  // Effect to ensure proper positioning below header
+  useEffect(() => {
+    // This runs after component mounts and ensures the content is positioned correctly
+    const fixHeroPosition = () => {
+      if (heroSectionRef.current) {
+        // Get header element (adjust the selector if needed)
+        const headerElement = document.querySelector('header');
+        if (headerElement) {
+          // Calculate header height
+          const headerHeight = headerElement.offsetHeight;
+          
+          // Add significant margin to ensure it's completely below the header
+          // Using marginTop instead of paddingTop to avoid affecting internal spacing
+          heroSectionRef.current.style.marginTop = `${headerHeight}px`;
+        }
+      }
+    };
+    
+    // Run initially and on resize
+    fixHeroPosition();
+    window.addEventListener('resize', fixHeroPosition);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('resize', fixHeroPosition);
+    };
+  }, []);
   
   // Driving school service data
   const services = [
@@ -125,8 +157,12 @@ const ServicesPage = () => {
 
   return (
     <div className="bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-blue-600 text-white py-20">
+      {/* Hero Section - Using a ref and completely revised positioning approach */}
+      <section 
+        ref={heroSectionRef}
+        className="bg-blue-600 text-white py-20"
+        style={{ position: 'relative', zIndex: 10 }}
+      >
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">{t("Unsere Leistungen")}</h1>
           <p className="text-xl max-w-3xl mx-auto mb-8">

@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { lang } = useParams();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -17,11 +18,11 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">{t("Legal Information")}</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><Link to="/legal/impressum" className="hover:text-white transition-colors">{t("Impressum")}</Link></li>
-              <li><Link to="/legal/privacy" className="hover:text-white transition-colors">{t("Privacy Policy")}</Link></li>
-              <li><Link to="/legal/terms" className="hover:text-white transition-colors">{t("Terms & Conditions")}</Link></li>
-              <li><Link to="/legal/withdrawal" className="hover:text-white transition-colors">{t("Right of Withdrawal")}</Link></li>
-              <li><Link to="/legal/shipping" className="hover:text-white transition-colors">{t("Shipping & Payment")}</Link></li>
+              <li><Link to={`/${lang}/legal/impressum`} className="hover:text-white transition-colors">{t("Impressum")}</Link></li>
+              <li><Link to={`/${lang}/legal/privacy`} className="hover:text-white transition-colors">{t("Privacy Policy")}</Link></li>
+              <li><Link to={`/${lang}/legal/terms`} className="hover:text-white transition-colors">{t("Terms & Conditions")}</Link></li>
+              <li><Link to={`/${lang}/legal/withdrawal`} className="hover:text-white transition-colors">{t("Right of Withdrawal")}</Link></li>
+              <li><Link to={`/${lang}/legal/shipping`} className="hover:text-white transition-colors">{t("Shipping & Payment")}</Link></li>
               <li>
                 <a 
                   href="https://ec.europa.eu/consumers/odr" 
