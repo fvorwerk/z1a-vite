@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+
+/* Remove padding from root element */
+#root {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+/* Reset basic elements for consistency */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Nav link hover effect */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #2563eb; /* blue-600 */
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* RTL-specific styles */
+.rtl {
+  /* Right-to-left specific styles */
+  text-align: right;
+}
+
+/* Mirror icons and directional elements in RTL mode */
+.rtl .icon-direction {
+  transform: scaleX(-1);
+}
+
+/* Adjust paddings and margins for RTL */
+.rtl .nav-link::after {
+  right: 0;
+  left: auto;
+}
+
+/* Adjust padding classes direction */
+.rtl .mr-1 {
+  margin-right: 0;
+  margin-left: 0.25rem;
+}
+
+.rtl .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+.rtl .ml-1 {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+
+/* Add more padding/margin overrides as needed */
+
+/* Handle flex direction changes for RTL */
+.rtl .flex-row {
+  flex-direction: row-reverse;
+}
+
+/* Ensure forms, grids, and other layout elements respect RTL */
+.rtl input, 
+.rtl textarea {
+  text-align: right;
+}
