@@ -16,6 +16,9 @@ import CookiePreferencesModal from './components/CookiePreferencesModal';
 import { CookieConsentProvider } from './contexts/CookieConsentContext';
 import TranslationDebugPage from './pages/TranslationDebugPage';
 import { useEffect } from 'react';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import PasswordCheckPage from './pages/PasswordCheckPage';
 
 function App() {
   const { i18n } = useTranslation();
@@ -47,37 +50,42 @@ function App() {
   }, [location.pathname]); // Only trigger on pathname changes, not hash changes
 
   return (
-    <CookieConsentProvider>
-      <RTLWrapper>
-        <div className="flex flex-col min-h-screen overflow-x-hidden">
-          <Header siteTitle="Z1 Ausbildungszentrum GmbH" />
-          <main className="flex-grow relative">
-            <Routes>
-              {/* Redirect root to default language */}
-              <Route path="/" element={<Navigate to={`/${defaultLanguage}`} replace />} />
-              
-              {/* Language-specific routes */}
-              <Route path="/:lang" element={<HomePage />} />
-              <Route path="/:lang/services" element={<ServicesPage />} />
-              <Route path="/:lang/legal/impressum" element={<ImpressumPage />} />
-              <Route path="/:lang/legal/privacy" element={<PrivacyPolicyPage />} />
-              <Route path="/:lang/legal/terms" element={<TermsPage />} />
-              <Route path="/:lang/legal/withdrawal" element={<WithdrawalPage />} />
-              <Route path="/:lang/legal/shipping" element={<ShippingPage />} />
-              
-              {/* 404 for invalid languages or paths */}
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </main>
-          
-          <Footer />
-          
-          {/* Cookie consent components */}
-          <CookieConsentBanner />
-          <CookiePreferencesModal />
-        </div>
-      </RTLWrapper>
-    </CookieConsentProvider>
+    <AuthProvider>
+      <CookieConsentProvider>
+        <RTLWrapper>
+          <div className="flex flex-col min-h-screen overflow-x-hidden">
+            <Header siteTitle="Z1 Ausbildungszentrum GmbH" />
+            <main className="flex-grow relative">
+              <Routes>
+                {/* Redirect root to default language */}
+                <Route path="/" element={<Navigate to={`/${defaultLanguage}`} replace />} />
+                
+                {/* Add language-specific password page route */}
+                <Route path="/:lang/dev-password" element={<PasswordCheckPage />} />
+                
+                {/* Language-specific routes */}
+                <Route path="/:lang" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+                <Route path="/:lang/services" element={<ProtectedRoute><ServicesPage /></ProtectedRoute>} />
+                <Route path="/:lang/legal/impressum" element={<ProtectedRoute><ImpressumPage /></ProtectedRoute>} />
+                <Route path="/:lang/legal/privacy" element={<ProtectedRoute><PrivacyPolicyPage /></ProtectedRoute>} />
+                <Route path="/:lang/legal/terms" element={<ProtectedRoute><TermsPage /></ProtectedRoute>} />
+                <Route path="/:lang/legal/withdrawal" element={<ProtectedRoute><WithdrawalPage /></ProtectedRoute>} />
+                <Route path="/:lang/legal/shipping" element={<ProtectedRoute><ShippingPage /></ProtectedRoute>} />
+                
+                {/* 404 for invalid languages or paths */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </main>
+            
+            <Footer />
+            
+            {/* Cookie consent components */}
+            <CookieConsentBanner />
+            <CookiePreferencesModal />
+          </div>
+        </RTLWrapper>
+      </CookieConsentProvider>
+    </AuthProvider>
   );
 }
 

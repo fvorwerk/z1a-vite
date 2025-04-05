@@ -26,13 +26,32 @@ const ServicesPage = () => {
       }
     };
     
-    // Run initially and on resize
+    // Run immediately, after a short delay, and on resize
     fixHeroPosition();
+    
+    // Additional timeout calls to ensure we catch the header after any animations or transitions
+    const timeoutId1 = setTimeout(fixHeroPosition, 100);
+    const timeoutId2 = setTimeout(fixHeroPosition, 300);
+    const timeoutId3 = setTimeout(fixHeroPosition, 500);
+    
+    // Add visibility change detection for when navigating between pages
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fixHeroPosition();
+        setTimeout(fixHeroPosition, 200);
+      }
+    };
+    
     window.addEventListener('resize', fixHeroPosition);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     
     // Clean up
     return () => {
       window.removeEventListener('resize', fixHeroPosition);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId2);
+      clearTimeout(timeoutId3);
     };
   }, []);
   
